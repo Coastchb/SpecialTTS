@@ -3,7 +3,7 @@ import shutil
 
 speaker_id = 'f001'
 raw_vidoe_dir = 'raw_videos'
-raw_wav_dir = 'extracted_wavs'
+raw_audio_dir = 'extracted_audios'
 map_file = 'filename_maps.txt'
 
 sampling_rate = 22050
@@ -13,9 +13,9 @@ if not os.path.exists(raw_vidoe_dir):
     print('Error: raw video dir {0} not exist!'.format(raw_vidoe_dir))
     exit(-1)
 
-if os.path.exists(raw_wav_dir):
-    shutil.rmtree(raw_wav_dir)
-os.makedirs(raw_wav_dir)
+if os.path.exists(raw_audio_dir):
+    shutil.rmtree(raw_audio_dir)
+os.makedirs(raw_audio_dir)
 
 file_cnt = 1
 map_info_list = []
@@ -33,7 +33,7 @@ for fn in os.listdir(raw_vidoe_dir):
             input_file=source_file,
             sr=sampling_rate,
             sf=sample_fmt,
-            output_file=os.path.join(raw_wav_dir, target_filename),
+            output_file=os.path.join(raw_audio_dir, target_filename),
         ))
     else:
         target_filename = '{0}_mic1.flac'.format(target_filename)
@@ -41,14 +41,14 @@ for fn in os.listdir(raw_vidoe_dir):
             input_file=source_file,
             sr=sampling_rate,
             sf=sample_fmt,
-            output_file=os.path.join(raw_wav_dir, target_filename),
+            output_file=os.path.join(raw_audio_dir, target_filename),
         ))
         target_filename = '{0}_mic2.flac'.format(target_filename)
         os.system('ffmpeg -i "{input_file}" -ar {sr} -sample_fmt {sf} -ac 1 -af "pan=mono|c0=FR" {output_file}'.format(
             input_file=source_file,
             sr=sampling_rate,
             sf=sample_fmt,
-            output_file=os.path.join(raw_wav_dir, target_filename)
+            output_file=os.path.join(raw_audio_dir, target_filename)
         ))
     file_cnt += 1
 
